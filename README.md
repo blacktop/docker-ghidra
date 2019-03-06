@@ -36,11 +36,23 @@ blacktop/ghidra          9.0                 1.08GB
 $ brew cask install xquartz
 ```
 
-2. `open -a XQuartz` and make sure you "Allow connections from network clients"
+2. Install socat
 
-3. Now add the IP using Xhost with: `xhost + $(ipconfig getifaddr en0)`
+```bash
+$ brew install socat
+```
 
-4. Start up Ghidra
+3. `open -a XQuartz` and make sure you "Allow connections from network clients"
+
+4. Now add the IP using Xhost with: `xhost + $(ipconfig getifaddr en0)`
+
+5. Start socat
+
+```bash
+$ socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\"
+```
+
+6. Start up Ghidra
 
 ```bash
 $ docker run --init --rm --name ghidra \
