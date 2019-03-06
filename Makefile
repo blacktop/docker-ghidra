@@ -36,7 +36,10 @@ push: build ## Push docker image to docker registry
 
 .PHONY: run
 run: stop ## Run docker container
-	@docker run --init -d --name $(NAME) -p 9200:9200 $(ORG)/$(NAME):$(BUILD)
+	@docker run --init -d --name $(NAME) \
+             -v /tmp/.X11-unix:/tmp/.X11-unix \
+             -e DISPLAY=$(ipconfig getifaddr en0):0 \
+             $(ORG)/$(NAME):$(BUILD)
 
 .PHONY: ssh
 ssh: ## SSH into docker image
