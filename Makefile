@@ -38,7 +38,7 @@ push: build ## Push docker image to docker registry
 run: stop ## Run docker container
 	@docker run --name $(NAME) \
 	         --privileged \
-             -e DISPLAY=$(ipconfig getifaddr en0):0 \
+             -e DISPLAY=host.docker.internal:0 \
              $(ORG)/$(NAME):$(BUILD)
 
 .PHONY: ssh

@@ -44,7 +44,7 @@ $ brew install socat
 
 3. `open -a XQuartz` and make sure you "Allow connections from network clients"
 
-4. Now add the IP using Xhost with: `xhost + $(ipconfig getifaddr en0)`
+4. Now add the IP using Xhost with: `xhost + $(ipconfig getifaddr en0)` or `xhost + 127.0.0.1`
 
 5. Start socat
 
@@ -56,8 +56,7 @@ $ socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\"
 
 ```bash
 $ docker run --init --rm --name ghidra \
-             -v /tmp/.X11-unix:/tmp/.X11-unix \
-             -e DISPLAY=$(ipconfig getifaddr en0):0 \
+             -e DISPLAY=host.docker.internal:0 \
              blacktop/ghidra
 ```
 
