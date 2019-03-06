@@ -36,14 +36,14 @@ push: build ## Push docker image to docker registry
 
 .PHONY: run
 run: stop ## Run docker container
-	@docker run --init -d --name $(NAME) \
+	@docker run --name $(NAME) \
              -v /tmp/.X11-unix:/tmp/.X11-unix \
              -e DISPLAY=$(ipconfig getifaddr en0):0 \
              $(ORG)/$(NAME):$(BUILD)
 
 .PHONY: ssh
 ssh: ## SSH into docker image
-	@docker run --init -it --rm --entrypoint=sh $(ORG)/$(NAME):$(BUILD)
+	@docker run --init -it --rm --entrypoint=bash -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=$(ipconfig getifaddr en0):0 $(ORG)/$(NAME):$(BUILD)
 
 .PHONY: stop
 stop: ## Kill running docker containers
