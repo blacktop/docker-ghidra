@@ -2,7 +2,7 @@
 
 # docker-ghidra
 
-[![CircleCI](https://circleci.com/gh/blacktop/docker-ghidra.png?style=shield)](https://circleci.com/gh/blacktop/docker-ghidra) [![License](https://img.shields.io/badge/licence-Apache%202.0-blue.svg)](LICENSE) [![Docker Stars](https://img.shields.io/docker/stars/blacktop/ghidra.svg)](https://hub.docker.com/r/blacktop/ghidra/) [![Docker Pulls](https://img.shields.io/docker/pulls/blacktop/ghidra.svg)](https://hub.docker.com/r/blacktop/ghidra/) [![Docker Image](https://img.shields.io/badge/docker%20image-1.08GB-blue.svg)](https://hub.docker.com/r/blacktop/ghidra/)
+[![License](https://img.shields.io/badge/licence-Apache%202.0-blue.svg)](LICENSE) [![Docker Stars](https://img.shields.io/docker/stars/blacktop/ghidra.svg)](https://hub.docker.com/r/blacktop/ghidra/) [![Docker Pulls](https://img.shields.io/docker/pulls/blacktop/ghidra.svg)](https://hub.docker.com/r/blacktop/ghidra/) [![Docker Image](https://img.shields.io/badge/docker%20image-1.08GB-blue.svg)](https://hub.docker.com/r/blacktop/ghidra/)
 
 # docker-ghidra
 
@@ -30,15 +30,17 @@ blacktop/ghidra          9.0                 1.08GB
 
 ### On macOS
 
-Install XQuartz
+1. Install XQuartz
 
 ```bash
 $ brew cask install xquartz
 ```
 
-`open -a XQuartz` and make sure you "Allow connections from network clients"
+2. `open -a XQuartz` and make sure you "Allow connections from network clients"
 
-Now add the IP using Xhost with: `xhost + $(ipconfig getifaddr en0)`
+3. Now add the IP using Xhost with: `xhost + $(ipconfig getifaddr en0)`
+
+4. Start up Ghidra
 
 ```bash
 $ docker run --init --rm --name ghidra \
