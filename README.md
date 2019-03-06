@@ -2,7 +2,7 @@
 
 # docker-ghidra
 
-[![License](https://img.shields.io/badge/licence-Apache%202.0-blue.svg)](LICENSE) [![Docker Stars](https://img.shields.io/docker/stars/blacktop/ghidra.svg)](https://hub.docker.com/r/blacktop/ghidra/) [![Docker Pulls](https://img.shields.io/docker/pulls/blacktop/ghidra.svg)](https://hub.docker.com/r/blacktop/ghidra/) [![Docker Image](https://img.shields.io/badge/docker%20image-1.08GB-blue.svg)](https://hub.docker.com/r/blacktop/ghidra/)
+[![License](https://img.shields.io/badge/licence-Apache%202.0-blue.svg)](LICENSE) [![Docker Stars](https://img.shields.io/docker/stars/blacktop/ghidra.svg)](https://hub.docker.com/r/blacktop/ghidra/) [![Docker Pulls](https://img.shields.io/docker/pulls/blacktop/ghidra.svg)](https://hub.docker.com/r/blacktop/ghidra/) [![Docker Image](https://img.shields.io/badge/docker%20image-1.28GB-blue.svg)](https://hub.docker.com/r/blacktop/ghidra/)
 
 # docker-ghidra
 
