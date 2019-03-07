@@ -20,8 +20,8 @@ Cuz Java is gross. :smirk:
 
 ```bash
 REPOSITORY               TAG                 SIZE
-blacktop/ghidra          latest              1.08GB
-blacktop/ghidra          9.0                 1.08GB
+blacktop/ghidra          latest              1.28GB
+blacktop/ghidra          9.0                 1.28GB
 ```
 
 ## Getting Started
