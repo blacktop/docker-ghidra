@@ -57,7 +57,9 @@ $ socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\"
 
 ```bash
 $ docker run --init -it --rm --name ghidra \
-             -e MAXMEM=2G \
+             --cpus="2" \
+             --memory="4g" \
+             -e MAXMEM=4G \
              -e DISPLAY=host.docker.internal:0 \
              -v /path/to/samples:/samples \
              -v /path/to/projects:/root \
