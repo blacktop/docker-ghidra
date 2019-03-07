@@ -36,9 +36,10 @@ push: build ## Push docker image to docker registry
 
 .PHONY: run
 run: stop ## Run docker container
-	@docker run --name $(NAME) \
-	         --privileged \
+	@docker run --init -it --name $(NAME) \
+			 -e MAXMEM=2G \
              -e DISPLAY=host.docker.internal:0 \
+			 -v `pwd`:/samples \
              $(ORG)/$(NAME):$(BUILD)
 
 .PHONY: ssh
