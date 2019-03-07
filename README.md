@@ -1,10 +1,10 @@
-![logo](https://raw.githubusercontent.com/blacktop/docker-ghidra/master/ghidra.png)
-
-# docker-ghidra
+<p align="center">
+  <a href="https://github.com/blacktop/docker-ghidra"><img alt="Malice Logo" src="https://raw.githubusercontent.com/blacktop/docker-ghidra/master/ghidra.png" height="140" /></a>
+  <a href="https://github.com/blacktop/docker-ghidra"><h3 align="center">docker-ghidra</h3></a>
+  <p align="center">Ghidra Docker Image</p>
+</p>
 
 [![License](https://img.shields.io/badge/licence-Apache%202.0-blue.svg)](LICENSE) [![Docker Stars](https://img.shields.io/docker/stars/blacktop/ghidra.svg)](https://hub.docker.com/r/blacktop/ghidra/) [![Docker Pulls](https://img.shields.io/docker/pulls/blacktop/ghidra.svg)](https://hub.docker.com/r/blacktop/ghidra/) [![Docker Image](https://img.shields.io/badge/docker%20image-1.28GB-blue.svg)](https://hub.docker.com/r/blacktop/ghidra/)
-
-> Ghidra Docker Image
 
 ---
 
