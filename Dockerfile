@@ -19,4 +19,14 @@ RUN apt-get update && apt-get install -y wget \
 
 WORKDIR /ghidra
 
-ENTRYPOINT ["/ghidra/ghidraRun"]
+ENV MAXMEM 2G
+
+# Resolve symbolic link if present and get the directory this script lives in.
+# NOTE: "readlink -f" is best but works on Linux only, "readlink" will only work if your PWD
+# contains the link you are calling (which is the best we can do on macOS), and the "echo" is the
+# fallback, which doesn't attempt to do anything with links.
+ENV SCRIPT_FILE=/ghidra/ghidraRun
+ENV SCRIPT_DIR=/ghidra
+
+# Launch Ghidra
+ENTRYPOINT ["/ghidra/support/launch.sh", "fg", "Ghidra", "768M", "", "ghidra.GhidraRun"]
