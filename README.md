@@ -11,15 +11,13 @@
           <img src="https://img.shields.io/badge/docker%20image-1.28GB-blue.svg" /></a>
 </p>
 
----
-
 ## Why?
 
 Cuz Java is gross. :smirk:
 
 ## Dependencies
 
-- [openjdk:jre-slim](https://hub.docker.com/_/openjdk)
+- [openjdk:jdk-slim](https://hub.docker.com/_/openjdk)
 
 ## Image Tags
 
