@@ -35,12 +35,25 @@ push: build ## Push docker image to docker registry
 	@docker push $(ORG)/$(NAME):$(BUILD)
 
 .PHONY: run
-run: stop ## Run docker container
+run: stop ## Run ghidra client
 	@docker run --init -it --name $(NAME) \
-			 -e MAXMEM=2G \
+             --cpus="2" \
+             --memory="4g" \
+             -e MAXMEM=4G \
              -e DISPLAY=host.docker.internal:0 \
 			 -v `pwd`:/samples \
              $(ORG)/$(NAME):$(BUILD)
+
+.PHONY: server
+server: stop ## Run ghidra server
+	@docker run --init -it --name $(NAME)-server \
+             --cpus="2" \
+             --memory="4g" \
+             $(ORG)/$(NAME):$(BUILD) server
+
+.PHONY: socat
+socat: ## Start socat
+	socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$$DISPLAY\"
 
 .PHONY: ssh
 ssh: ## SSH into docker image
@@ -49,6 +62,7 @@ ssh: ## SSH into docker image
 .PHONY: stop
 stop: ## Kill running docker containers
 	@docker rm -f $(NAME) || true
+	@docker rm -f $(NAME)-server || true
 
 .PHONY: stop-all
 stop-all: ## Kill ALL running docker containers

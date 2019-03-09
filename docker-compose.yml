@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  server:
+    image: blacktop/ghidra
+    command: server
+    volumes:
+      - repo-data:/var/lib/postgresql/data
+    ports:
+      - "13100"
+    networks:
+      - backend
+
+networks:
+  backend:
+
+volumes: repo-data:
