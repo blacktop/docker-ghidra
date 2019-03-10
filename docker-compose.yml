@@ -5,7 +5,7 @@ services:
     image: blacktop/ghidra
     command: server
     volumes:
-      - repo-data:/var/lib/postgresql/data
+      - repo-data:/repos
     ports:
       - "13100"
     networks:
