@@ -13,7 +13,7 @@
 
 ## Why?
 
-Cuz Java is gross. :smirk:
+Cuz installing Java on your Mac is gross. :smirk:
 
 ## Dependencies
 
@@ -67,14 +67,14 @@ $ docker run --init -it --rm \
              blacktop/ghidra
 ```
 
-### Server :construction: [WIP]
+### Server
 
 ```bash
 $ docker run --init -it --rm \
              --name ghidra-server \
              --cpus 2 \
              --memory 4g \
-             -e GHIDRA_USERS="admin blackop"
+             -e GHIDRA_USERS="root blackop"
              -v /path/to/repos:/repos \
              blacktop/ghidra server
 ```
