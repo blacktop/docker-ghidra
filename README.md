@@ -74,7 +74,7 @@ $ docker run --init -it --rm \
              --name ghidra-server \
              --cpus 2 \
              --memory 4g \
-             -e GHIDRA_USERS="root blackop"
+             -e GHIDRA_USERS="root blacktop"
              -v /path/to/repos:/repos \
              blacktop/ghidra server
 ```
