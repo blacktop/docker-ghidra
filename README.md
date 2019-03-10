@@ -1,7 +1,7 @@
 <p align="center">
   <a href="https://github.com/blacktop/docker-ghidra"><img alt="Malice Logo" src="https://raw.githubusercontent.com/blacktop/docker-ghidra/master/ghidra.png" height="140" /></a>
   <a href="https://github.com/blacktop/docker-ghidra"><h3 align="center">docker-ghidra</h3></a>
-  <p align="center">Ghidra Docker Image</p>
+  <p align="center">Ghidra Client/Server Docker Image</p>
   <p align="center">
     <a href="https://hub.docker.com/r/blacktop/ghidra/" alt="Docker Stars">
           <img src="https://img.shields.io/docker/stars/blacktop/ghidra.svg" /></a>
