@@ -81,8 +81,8 @@ $ docker run --init -it --rm \
 
 ## TODO
 
-- Figure out how to add `--network none` :wink:
-- Figure out how to add `--read-only`
+- [ ] Figure out how to add `--network none` :wink:
+- [ ] Figure out how to add `--read-only`
 
 ## Issues
 
