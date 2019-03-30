@@ -1,7 +1,7 @@
 FROM openjdk:11-jdk-slim
 
 ENV VERSION 9.0.1
-ENV GHIDRA_SHA 3b65d29024b9decdbb1148b12fe87bcb7f3a6a56ff38475f5dc9dd1cfc7fd6b2
+ENV GHIDRA_SHA 58ffa488e6dc57e2c023670c1dfac0469bdb6f4e7da98f70610d9f561b65c774
 
 RUN apt-get update && apt-get install -y wget --no-install-recommends \
     && wget --progress=bar:force -O /tmp/ghidra.zip  https://www.ghidra-sre.org/ghidra_9.0.1_PUBLIC_20190325.zip \
