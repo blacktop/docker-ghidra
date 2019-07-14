@@ -10,6 +10,9 @@ all: build size test
 build: ## Build docker image
 	docker build -t $(ORG)/$(NAME):$(BUILD) .
 
+build-alpine: ## Build alpine based docker image
+	docker build -t $(ORG)/$(NAME):$(BUILD)-alpine -f Dockerfile.alpine .
+
 .PHONY: size
 size: build ## Get built image size
 ifeq "$(BUILD)" "$(LATEST)"
