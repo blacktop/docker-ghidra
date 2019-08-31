@@ -12,3 +12,4 @@ docker-compose.yml
 
 beta
 kernelcache*
+dyld_shared_cache*
