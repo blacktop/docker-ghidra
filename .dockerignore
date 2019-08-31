@@ -5,5 +5,10 @@
 LATEST
 LICENSE
 Makefile
-README.md
+*.md
+*.bu
 ghidra.png
+docker-compose.yml
+
+beta
+kernelcache*
