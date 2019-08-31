@@ -1,3 +1,4 @@
 *.bu
 *.decompressed
 .vscode
+dyld_shared_cache
