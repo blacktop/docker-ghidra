@@ -1,4 +1,6 @@
 *.bu
 *.decompressed
 .vscode
-dyld_shared_cache
+dyld_shared_cache*
+System
+projects
