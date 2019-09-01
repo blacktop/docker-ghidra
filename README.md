@@ -36,26 +36,11 @@ blacktop/ghidra          beta                1.24GB
 
 #### On macOS
 
-1. Install XQuartz
-
-```bash
-$ brew cask install xquartz
-```
-
-2. Install socat
-
-```bash
-$ brew install socat
-```
-
+1. Install XQuartz `brew cask install xquartz`
+2. Install socat `brew install socat`
 3. `open -a XQuartz` and make sure you **"Allow connections from network clients"**
 4. Now add the IP using Xhost with: `xhost + 127.0.0.1` or `xhost + $(ipconfig getifaddr en0)`
-5. Start socat
-
-```bash
-$ socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\"
-```
-
+5. Start socat `socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\"`
 6. Start up Ghidra
 
 ```bash
