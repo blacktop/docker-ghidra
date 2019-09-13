@@ -2,11 +2,7 @@ FROM gradle:jdk11 as builder
 
 ENV GITHUB_URL https://github.com/NationalSecurityAgency/ghidra.git
 
-RUN apt-get update && apt-get install -y curl git bison flex build-essential unzip cmake
-
-COPY install_clang /tmp/install_clang
-RUN echo "[+] Installing Clang..." \
-    && /tmp/install_clang -j -C /opt/clang
+RUN apt-get update && apt-get install -y curl git bison flex build-essential unzip cmake clang-8
 
 RUN echo "[+] Cloning Ghidra..." \
     && git clone ${GITHUB_URL} /root/git/ghidra
@@ -23,10 +19,13 @@ RUN echo "[+] Downloading dependencies..." \
 
 RUN echo "[+] Building Ghidra..." \
     && gradle buildNatives_linux64 \
-    && gradle buildNatives_osx64 \
-    # && gradle buildNatives_win64 \
     && gradle sleighCompile \
-    && gradle buildGhidra -PallPlatforms
+    && gradle buildGhidra
+# && gradle buildNatives_linux64 \
+# && gradle buildNatives_osx64 \
+# # && gradle buildNatives_win64 \
+# && gradle sleighCompile \
+# && gradle buildGhidra -PallPlatforms
 
 ##########################################################################################
 FROM busybox
