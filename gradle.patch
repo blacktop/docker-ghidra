@@ -1,0 +1,15 @@
+diff --git a/gradle/root/distribution.gradle b/gradle/root/distribution.gradle
+index 3200e38b..3c31b641 100644
+--- a/gradle/root/distribution.gradle
++++ b/gradle/root/distribution.gradle
+@@ -378,8 +378,8 @@ task createInstallationZip(type: Zip) { t ->
+ 	dependsOn "assembleDistribution_$currentPlatform"
+ 	
+ 	if (project.hasProperty("allPlatforms")) {
+-		dependsOn ":assembleDistribution_win32"
+-		dependsOn ":assembleDistribution_win64"
++		// dependsOn ":assembleDistribution_win32"
++		// dependsOn ":assembleDistribution_win64"
+ 		dependsOn ":assembleDistribution_linux64"
+ 		dependsOn ":assembleDistribution_osx64"
+ 		dependsOn ":assembleSource"

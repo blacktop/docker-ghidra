@@ -1,0 +1,415 @@
+#! /usr/bin/env bash
+
+OS=`uname`
+if [ "$OS" == "Linux" ]; then
+    triple=$(gcc -v 2>&1 | grep "^Target:" | cut -d ' ' -f 2)
+    addl_ldflags=""
+    addl_cmake="-DLLVM_DEFAULT_TARGET_TRIPLE=${triple}"
+
+elif [ "$OS" == "FreeBSD" ]; then
+    echo ${OS} not supported currently.
+    exit 1
+
+    triple=""
+    addl_ldflags=""
+    addl_cmake=""
+
+elif [ "$OS" == "Darwin" ]; then
+    if ! which xcodebuild >/dev/null; then
+        echo "xcodebuild not available"
+        exit 1
+    fi
+
+    sysroot=$(xcodebuild -version -sdk macosx Path)
+
+    triple=""
+    addl_ldflags=""
+    addl_cmake="-DDEFAULT_SYSROOT=${sysroot} -DCMAKE_OSX_ARCHITECTURES=x86_64 -DDARWIN_iossim_ARCHS=x86_64 -DLLDB_CODESIGN_IDENTITY=- -DLLDB_USE_SYSTEM_DEBUGSERVER=ON"
+else
+    echo "OS $OS not supported by this script."
+    exit 1
+fi
+
+if [ -n "$CC" ]; then
+    cc=$CC
+elif which clang > /dev/null 2>&1; then
+    cc=clang
+elif which gcc > /dev/null 2>&1; then
+    cc=gcc
+else
+    echo could not find clang or gcc in '$PATH'
+    exit 1
+fi
+
+if [ -n "$CXX" ]; then
+    cxx=$CXX
+elif which clang++ > /dev/null 2>&1; then
+    cxx=clang++
+elif which g++ > /dev/null 2>&1; then
+    cxx=g++
+else
+    echo could not find clang++ or g++ in '$PATH'
+    exit 1
+fi
+
+shopt -s nullglob
+
+git_base=https://github.com/llvm
+
+use_master=0
+perform_clone=1            # If 0, skip the cloning (for testing only).
+perform_stage1=1           # If 0, skip the 1st bootstrap stage (for testing only).
+perform_stage2=1           # If 0, skip the 2nd stage compiling LLVM/clang against libc++ (for testing only).
+perform_lldb_build=1       # If 1, attempt to build LLDB.
+perform_lld_build=1        # If 1, attempt to build LLDB.
+perform_extra_build=1      # If 1, attempt to build clang-extra tools.  -- TODO: clangd doesn't compile
+perform_cleanup=0          # If 1, delete all source and build directories.
+assertions=off             # If "on", enable LLVM assertions.
+parallelism=4              # The value X to pass to make -j X to build in parallel.
+buildtype=Release          # LLVM/clang build type.
+mode=install               # Install from scratch.
+targets=host               # LLVM_TARGETS_TO_BUILD ("all" builds them all).
+
+# Whether to build & link shared libraries. Default is static, except for macOS
+# where static fails.
+if [ "$OS" == "Darwin" ]; then
+    build_shared_libs=on
+else
+    build_shared_libs=off
+fi
+
+if eval ${cxx} --version | grep -q clang; then
+    perform_stage0=0
+    have_clang=1
+else
+    perform_stage0=1
+    have_clang=0
+fi
+
+usage()
+{
+    printf "Usage: %s [<options>] <install-prefix>\n" $(basename $0)
+    echo ""
+    echo "Available options:"
+    echo "    -A         enables assertions in LLVM libraries"
+    echo "    -b         build type (Release, Debug, RelWithDebInfo) [default: ${buildtype}]"
+    echo "    -c         skip cloning repositories, assume they are in place"
+    echo "    -C         clean up after build by deleting the LLVM/clang source/build directories"
+    echo "    -h|-?      display this help"
+    echo "    -j <n>     build with <n> threads in parallel [default: ${parallelism}]"
+    echo "    -m         use git/master instead of preconfigured versions"
+    echo "    -s <stage> begin build from <stage> [0, 1, 2]"
+    echo "    -S         build, and link against, shared libraries (this is the default on macOS)"
+    echo "    -u         update an existing build in <prefix> instead of installing new"
+    echo ""
+    echo "Environment variables:"
+    echo "    CC         path to the C compiler for bootstrapping"
+    echo "    CXX        path to the C++ compiler for bootstrapping"
+}
+
+while getopts "Ab::j:lms:ucCh?" opt ; do
+    case "$opt" in
+        c)
+            perform_clone=0
+            ;;
+        C)
+            perform_cleanup=1
+            ;;
+        h|\?)
+            usage
+            exit 0
+            ;;
+        j)
+            parallelism=$OPTARG
+            ;;
+        m)
+            use_master=1
+            ;;
+        s)
+            if [ "$OPTARG" == "0" ]; then
+                perform_stage0=1
+                perform_stage1=1
+                perform_stage2=1
+            elif [ "$OPTARG" == "1" ]; then
+                perform_stage0=0
+                perform_stage1=1
+                perform_stage2=1
+            elif [ "$OPTARG" == "2" ]; then
+                perform_stage0=0
+                perform_stage1=0
+                perform_stage2=1
+            else
+                echo 'stage parameter must be in [0,1,2].'
+                exit 1
+            fi
+            ;;
+        u)
+            mode=update
+            ;;
+
+        A)
+            assertions=on
+            ;;
+
+        b)
+            buildtype=$OPTARG
+            ;;
+
+        S)
+            build_shared_libs=on
+            ;;
+
+    esac
+done
+
+shift $(expr $OPTIND - 1)
+prefix=`echo $1 | sed 's#/$##'`
+shift
+
+if [ "$mode" == "" -o "$prefix" == "" ]; then
+    usage
+    exit 1
+fi
+
+if [ "${use_master}" != "1" ]; then
+    # git version to checkout.
+    version=release/9.x
+    cherrypick=""
+else
+    # git version to checkout.
+    version=master
+fi
+
+if [ ! -d $prefix ]; then
+    if [ "$mode" == "install" ]; then
+        if ! mkdir -p $prefix; then
+            echo failed to create directory $prefix
+            exit 1
+        fi
+    else
+        echo $prefix does not exist
+        exit 1
+    fi
+fi
+
+#### Copy all output to log file.
+log=install.$$.log
+echo "Recording log in $log ..."
+exec > >(tee $log) # Requires fdescfs mounted to /dev/fd on FreeBSD.
+exec 2>&1
+
+#### Set paths and environment.
+
+unset LD_LIBRARY_PATH
+unset DYLD_LIBRARY_PATH
+
+# Built libraries with RTTI.
+export REQUIRES_RTTI=1
+export PATH=$prefix/bin:$PATH
+
+src="$prefix/src/llvm"
+libcxx_include=$prefix/include/c++/v1
+libcxx_lib=$prefix/lib
+default_includes=/usr/include
+
+mkdir -p $libcxx_include
+
+function st
+{
+    eval echo \$\{$1_stage${stage}\}
+}
+
+function add_include_path
+{
+    include=$1
+    shift
+    search_paths=$@
+    new_includes=${default_includes}
+
+    for p in ${search_paths}; do
+        test -d ${p} || continue
+
+        path=`find "${p}" | grep "${include}$" | awk '{print length, $0;}' | sort -n | head -1 | awk '{printf("%s", $2)}'`
+
+        if [ -n "${path}" ]; then
+            path=`echo -n ${path} | sed "s#/${include}##g"`
+            if [ -n "${new_includes}" ] && ! $(echo "${new_includes}" | tr ":" "\n" | grep -qx "${path}"); then
+                new_includes="${new_includes}:${path}"
+            else
+                new_includes="${new_includes}"
+            fi
+            break
+        fi
+    done
+
+    echo  -n ${new_includes}
+}
+
+#### Clone reposistories.
+
+export GIT_COMMITTER_EMAIL="`whoami`@localhost"
+export GIT_COMMITTER_NAME="`whoami`"
+
+d=`dirname $0`
+patches=`cd $d; pwd`/patches
+
+if [ "${perform_clone}" == "1" ]; then
+
+    # Get/update the repositories.
+    if [ "$mode" == "install" ]; then
+
+        test -d $src && echo "$src already exists, aborting" && exit 1
+        mkdir -p $src
+
+        echo Changing directory to `dirname $src` for installing  ...
+        cd `dirname $src`
+
+        git clone ${git_base}/llvm-project.git `basename $src`
+        ( cd $src && git checkout -q ${version} )
+
+    else
+        echo Changing directory to `dirname $src` for updating ...
+        cd `dirname $src`
+
+        ( cd $src && git checkout -q ${version} )
+        ( cd ${src} && git pull --rebase )
+    fi
+
+    # Cherry pick additional commits from master.
+    echo "${cherrypick}" | awk -v RS=\; '{print}' | while read line; do
+        if [ "$line" != "" ]; then
+            repo=`echo $line | cut -d ' ' -f 1`
+            commits=`echo $line | cut -d ' ' -f 2-`
+            echo "Cherry-picking $commits in $repo"
+            ( cd ${src}/$repo \
+              && git cherry-pick --strategy=recursive -X theirs $commits )
+        fi
+    done
+
+    # Apply any patches we might need.
+    for i in $patches/0*; do
+        echo === Applying ${i} in $(pwd)
+        (cd ${src} && cat ${i} | git am -3)
+    done
+
+    echo === Done applying patches
+
+fi
+
+if [ "$OS" == "Darwin" ]; then
+    CMAKE_stage1="-DCMAKE_C_COMPILER=/usr/bin/clang -DCMAKE_CXX_COMPILER=/usr/bin/clang++"
+
+elif [ "$OS" == "Linux" ]; then
+    CMAKE_common="-DLLVM_LIBDIR_SUFFIX=64" # lldb needs this
+    CMAKE_stage1="-DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=on -DLIBCXX_ENABLE_ABI_LINKER_SCRIPT=off -DLIBCXXABI_ENABLE_SHARED=off"
+    CMAKE_stage2=$CMAKE_stage1
+    default_includes=$(add_include_path features.h /usr/include)
+    default_includes=$(add_include_path sys/cdefs.h /usr/include/${triple} /usr/include)
+else
+    echo "OS $OS not supported"
+    exit 1
+fi
+
+projects_stage0="clang;libcxx"
+projects_stage1="clang;libcxx;compiler-rt;libcxxabi;libunwind"
+projects_stage2="clang;libcxx;compiler-rt;libcxxabi;libunwind"
+
+test ${perform_lldb_build} = 1 && projects_stage2="${projects_stage2};lldb"
+test ${perform_lld_build} = 1 && projects_stage2="${projects_stage2};lld"
+test ${perform_extra_build} = 1 && projects_stage2="${projects_stage2};clang-tools-extra"
+
+CMAKE_common="-DBUILD_SHARED_LIBS=${build_shared_libs} -DLLVM_TARGETS_TO_BUILD=${targets}"
+CMAKE_stage0="${CMAKE_common} ${CMAKE_stage0} -DLLVM_ENABLE_PROJECTS=${projects_stage0}"
+CMAKE_stage1="${CMAKE_common} ${CMAKE_stage1} -DLLVM_ENABLE_PROJECTS=${projects_stage1} -DLIBCXXABI_USE_LLVM_UNWINDER=YES -DLLVM_ENABLE_ASSERTIONS=${assertions}"
+CMAKE_stage2="${CMAKE_common} ${CMAKE_stage2} -DLLVM_ENABLE_PROJECTS=${projects_stage2} -DLIBCXXABI_USE_LLVM_UNWINDER=YES -DLLVM_ENABLE_ASSERTIONS=${assertions}"
+
+#### Configure the stages.
+
+# Stage 0 options. Get us a clang.
+
+CC_stage0="$cc"
+CXX_stage0="$cxx"
+CXXFLAGS_stage0=""
+CMAKE_stage0="${CMAKE_stage0}"
+BUILD_TYPE_stage0=${buildtype}
+EXE_LINKER_FLAGS_stage0=""
+
+# Stage 1 options. Compile against standard libraries.
+
+if [ "${have_clang}" == "1" ]; then
+    CC_stage1="$cc"
+    CXX_stage1="$cxx"
+else
+    CC_stage1=$prefix/bin/clang
+    CXX_stage1=$prefix/bin/clang++
+fi
+
+CXXFLAGS_stage1=""
+BUILD_TYPE_stage1=${buildtype}
+EXE_LINKER_FLAGS_stage1=""
+
+# Stage 2 options. Compile against our own libraries.
+
+CC_stage2=$prefix/bin/clang
+CXX_stage2=$prefix/bin/clang++
+CFLAGS_stage2=""
+CXXFLAGS_stage2="-stdlib=libc++"
+CMAKE_stage2="${CMAKE_stage2}"
+BUILD_TYPE_stage2=${buildtype}
+
+if [ "${build_shared_libs}" != "on" ]; then
+    EXE_LINKER_FLAGS_stage2="-static-libgcc -static-libstdc++"
+else
+    EXE_LINKER_FLAGS_stage2=""
+fi
+
+#### Compile the stages.
+
+echo Changing directory to $src ...
+cd $src
+
+for stage in 0 1 2; do
+     if [ "`st perform`" == "0" ]; then
+         continue
+     fi
+
+     echo ===
+     echo === Building LLVM/clang, stage ${stage} ...
+     echo ===
+
+     ( cd $src && \
+       mkdir -p build-stage${stage} && \
+       cd build-stage${stage} && \
+       CC=`st CC` \
+       CXX=`st CXX` \
+       CFLAGS="`st CFLAGS` ${CFLAGS}" \
+       CXXFLAGS="`st CXXFLAGS` ${CXXFLAGS}" \
+       LDFLAGS="${addl_ldflags} ${LDFLAGS}" \
+       cmake -DCMAKE_BUILD_TYPE=`st BUILD_TYPE` \
+             -DLLVM_REQUIRES_RTTI=1 \
+             -DCMAKE_INSTALL_PREFIX=${prefix} \
+             -DC_INCLUDE_DIRS=${default_includes} \
+             -DCMAKE_EXE_LINKER_FLAGS="`st EXE_LINKER_FLAGS`" \
+             ${addl_cmake} \
+             `st CMAKE` \
+             ${src}/llvm && \
+       make -j $parallelism && \
+       make install \
+     )
+
+    if [ "$?" != "0" ] ; then
+        echo ===
+        echo === Failed building LLVM/clang at stage ${stage}
+        echo ===
+        exit 1
+    fi
+done
+
+if [ "${perform_cleanup}" == "1" ]; then
+    echo Deleting $src ...
+    rm -rf "${src}"
+fi
+
+echo "===="
+echo "==== Complete log in $log"
+echo "===="

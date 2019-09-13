@@ -16,6 +16,9 @@ build-alpine: ## Build alpine based docker image
 build-beta: ## Build beta based docker image
 	docker build -t $(ORG)/$(NAME):beta -f Dockerfile.beta .
 
+build-pkg: ## Build pkg based docker image
+	docker build -t $(ORG)/$(NAME):pkg -f Dockerfile.pkg .
+
 .PHONY: size
 size: build ## Get built image size
 ifeq "$(BUILD)" "$(LATEST)"
