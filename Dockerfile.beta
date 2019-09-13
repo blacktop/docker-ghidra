@@ -2,7 +2,7 @@ FROM gradle:jdk11 as builder
 
 ENV GITHUB_URL https://github.com/NationalSecurityAgency/ghidra.git
 
-RUN apt-get update && apt-get install -y curl git bison flex build-essential
+RUN apt-get update && apt-get install -y curl git bison flex build-essential unzip
 
 RUN echo "[+] Cloning Ghidra..." \
     && git clone ${GITHUB_URL} /root/git/ghidra
@@ -12,26 +12,33 @@ WORKDIR /root/git/ghidra
 RUN echo "[+] Downloading dependencies..." \
     && gradle --init-script gradle/support/fetchDependencies.gradle init
 
-# RUN gradle buildNatives_linux64
 RUN echo "[+] Building Ghidra..." \
+    && gradle buildNatives_linux64 \
+    # && gradle buildNatives_osx64 \
+    # && gradle buildNatives_win64 \
+    && gradle sleighCompile \
     && gradle buildGhidra
+# && gradle buildGhidra -PallPlatforms
+
+WORKDIR /ghidra
+
+RUN echo "[+] Unzip Ghidra..." \
+    && unzip /root/git/ghidra/build/dist/ghidra_*_linux64.zip -d /tmp \
+    && mv /tmp/ghidra_*/* /ghidra \
+    && chmod +x /ghidra/ghidraRun \
+    && rm /ghidra/docs /ghidra/Extensions/Eclipse /ghidra/licenses
 
 ##########################################################################################
 FROM openjdk:11-jdk-slim
 
 LABEL maintainer "https://github.com/blacktop"
 
-COPY --from=builder /root/git/ghidra/build/dist /ghidra
+COPY --from=builder /ghidra /ghidra
 
-RUN apt-get update && apt-get install -y fontconfig libxrender1 libxtst6 libxi6 unzip --no-install-recommends \
-    && unzip /ghidra/*.zip -d /tmp \
-    && rm /ghidra/*.zip \
-    && mv /tmp/ghidra_*/* /ghidra \
-    && chmod +x /ghidra/ghidraRun \
+RUN apt-get update && apt-get install -y fontconfig libxrender1 libxtst6 libxi6 --no-install-recommends \
     && echo "===> Clean up unnecessary files..." \
-    && apt-get purge -y --auto-remove unzip \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives /tmp/* /var/tmp/* /ghidra/docs /ghidra/Extensions/Eclipse /ghidra/licenses
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives /tmp/* /var/tmp/*
 
 WORKDIR /ghidra
 
