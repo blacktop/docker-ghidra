@@ -14,11 +14,8 @@ RUN echo "[+] Downloading dependencies..." \
 
 RUN echo "[+] Building Ghidra..." \
     && gradle buildNatives_linux64 \
-    # && gradle buildNatives_osx64 \
-    # && gradle buildNatives_win64 \
     && gradle sleighCompile \
     && gradle buildGhidra
-# && gradle buildGhidra -PallPlatforms
 
 WORKDIR /ghidra
 
@@ -26,7 +23,7 @@ RUN echo "[+] Unzip Ghidra..." \
     && unzip /root/git/ghidra/build/dist/ghidra_*_linux64.zip -d /tmp \
     && mv /tmp/ghidra_*/* /ghidra \
     && chmod +x /ghidra/ghidraRun \
-    && rm /ghidra/docs /ghidra/Extensions/Eclipse /ghidra/licenses
+    && rm -rf /ghidra/docs /ghidra/Extensions/Eclipse /ghidra/licenses
 
 ##########################################################################################
 FROM openjdk:11-jdk-slim
