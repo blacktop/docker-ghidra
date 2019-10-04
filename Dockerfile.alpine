@@ -7,8 +7,7 @@ RUN apk add --no-cache openjdk11-jre bash
 
 RUN apk add --no-cache -t .build-deps wget ca-certificates unzip \
     && wget --progress=bar:force -O /tmp/ghidra.zip https://www.ghidra-sre.org/ghidra_9.0.4_PUBLIC_20190516.zip \
-    && sha256sum /tmp/ghidra.zip \
-    # && echo "${GHIDRA_SHA} /tmp/ghidra.zip" | sha256sum -c - \
+    && echo "${GHIDRA_SHA}  /tmp/ghidra.zip" | sha256sum -c - \
     && unzip /tmp/ghidra.zip \
     && mv ghidra_${VERSION} /ghidra \
     && chmod +x /ghidra/ghidraRun \
