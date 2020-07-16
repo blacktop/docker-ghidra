@@ -1,13 +1,31 @@
 FROM gradle:jdk11 as builder
 
-ENV GITHUB_URL https://github.com/NationalSecurityAgency/ghidra.git
+ENV GITHUB_URL https://api.github.com/repos/NationalSecurityAgency/ghidra/tarball
 
-RUN apt-get update && apt-get install -y curl git bison flex build-essential unzip
-
-RUN echo "[+] Cloning Ghidra..." \
-    && git clone ${GITHUB_URL} /root/git/ghidra
+RUN apt-get update --quiet \
+    && DEBIAN_FRONTEND=noninteractive \
+        apt-get install --yes --quiet --no-install-recommends \
+            bash \
+            bison \
+            curl \
+            docbook-xsl \
+            flex \
+            fop \
+            g++ \
+            gcc \
+            git \
+            libc6-dev \
+            make \
+            sed \
+            tar \
+            unzip \
+            xsltproc \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /root/git/ghidra
+
+RUN echo "[+] Getting Ghidra Source..." \
+    && curl -sSL ${GITHUB_URL} | tar -xz --strip-components=1
 
 RUN echo "[+] Downloading dependencies..." \
     && gradle --init-script gradle/support/fetchDependencies.gradle init
