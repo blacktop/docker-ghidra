@@ -4,6 +4,9 @@ set -e
 
 if [ "$1" = 'server' ]; then
   shift
+  # Figure out public address
+  export GHIDRA_PUBLIC_HOSTNAME=${GHIDRA_PUBLIC_HOSTNAME:-$(dig +short myip.opendns.com @resolver1.opendns.com)}
+
   # Add users
   GHIDRA_USERS=${GHIDRA_USERS:-admin}
   if [ ! -e "/repos/users" ] && [ ! -z "${GHIDRA_USERS}" ]; then
@@ -13,23 +16,8 @@ if [ "$1" = 'server' ]; then
       echo "-add ${user}" >> /repos/~admin/adm.cmd
     done
   fi
-  #----------------------------------------
-  # Ghidra Server launch
-  #----------------------------------------
-  exec "/ghidra/server/ghidraSvr" console
 
-elif [ "$1" = 'client' ]; then
-  shift
-  #----------------------------------------
-  # Ghidra launch
-  #----------------------------------------
-  SCRIPT_DIR=/ghidra
-  SCRIPT_FILE=/ghidra/ghidraRun
-  # Maximum heap memory may be changed if default is inadequate. This will generally be up to 1/4 of
-  # the physical memory available to the OS. Uncomment MAXMEM setting if non-default value is needed.
-  MAXMEM=${MAXMEM:-768M}
-  # Launch Ghidra
-  exec "${SCRIPT_DIR}"/support/launch.sh fg Ghidra $MAXMEM "" ghidra.GhidraRun "$@"
+  exec "/ghidra/server/ghidraSvr" console
 fi
 
 exec "$@"
