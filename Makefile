@@ -19,6 +19,9 @@ build-beta: ## Build beta based docker image
 build-pkg: ## Build pkg based docker image
 	docker build -t $(ORG)/$(NAME):pkg -f Dockerfile.pkg .
 
+build-bindiff: ## Build pkg based docker image
+	docker build -t $(ORG)/$(NAME):bindiff -f Dockerfile.bindiff .
+
 .PHONY: size
 size: build ## Get built image size
 ifeq "$(BUILD)" "$(LATEST)"
