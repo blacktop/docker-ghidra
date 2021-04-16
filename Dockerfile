@@ -1,9 +1,9 @@
 FROM openjdk:11-jdk-slim
 
-ENV VERSION 9.2.2_PUBLIC
-ENV GHIDRA_SHA 8cf8806dd5b8b7c7826f04fad8b86fc7e07ea380eae497f3035f8c974de72cf8
+ENV VERSION 9.2.3_PUBLIC
+ENV GHIDRA_SHA 9019c78f8b38d68fd40908b040466974a370e26ba51b2aaeafc744171040f714
 RUN apt-get update && apt-get install -y fontconfig libxrender1 libxtst6 libxi6 wget unzip python-requests --no-install-recommends \
-    && wget --progress=bar:force -O /tmp/ghidra.zip https://ghidra-sre.org/ghidra_9.2.2_PUBLIC_20201229.zip \
+    && wget --progress=bar:force -O /tmp/ghidra.zip https://ghidra-sre.org/ghidra_9.2.3_PUBLIC_20210325.zip \
     && echo "$GHIDRA_SHA /tmp/ghidra.zip" | sha256sum -c - \
     && unzip /tmp/ghidra.zip \
     && mv ghidra_${VERSION} /ghidra \
