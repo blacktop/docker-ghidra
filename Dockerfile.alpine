@@ -1,12 +1,12 @@
-FROM alpine:3.10
+FROM alpine:3.14
 
-ENV VERSION 9.1
-ENV GHIDRA_SHA "ebe3fa4e1afd7d97650990b27777bb78bd0427e8e70c1d0ee042aeb52decac61"
+ENV VERSION 10.0
+ENV GHIDRA_SHA "aaf84d14fb059beda10de9056e013186601962b6f87cd31161aaac57698a0f11"
 
 RUN apk add --no-cache openjdk11-jre bash
 
 RUN apk add --no-cache -t .build-deps wget ca-certificates unzip \
-    && wget --progress=bar:force -O /tmp/ghidra.zip https://www.ghidra-sre.org/ghidra_9.1.2_PUBLIC_20200212.zip \
+    && wget --progress=bar:force -O /tmp/ghidra.zip https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_10.0_build/ghidra_10.0_PUBLIC_20210621.zip \
     && echo "${GHIDRA_SHA}  /tmp/ghidra.zip" | sha256sum -c - \
     && unzip /tmp/ghidra.zip \
     && mv ghidra_${VERSION} /ghidra \
