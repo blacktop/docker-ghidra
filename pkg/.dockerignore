@@ -1,0 +1,15 @@
+# Ignore .git folder
+.git*
+.gitignore
+
+LATEST
+LICENSE
+Makefile
+*.md
+*.bu
+ghidra.png
+docker-compose.yml
+
+beta
+kernelcache*
+dyld_shared_cache*
