@@ -6,8 +6,6 @@
 name: Publish Docker Image
 
 on:
-  schedule:
-    - cron: '0 10 * * *' # everyday at 10am
   push:
     branches:
       - '**'
@@ -76,4 +74,25 @@ jobs:
             blacktop/ghidra:10.0
             blacktop/ghidra:10.0.2
             blacktop/ghidra:latest
+            ghcr.io/blacktop/ghidra:10
+            ghcr.io/blacktop/ghidra:10.0
+            ghcr.io/blacktop/ghidra:10.0.2
+            ghcr.io/blacktop/ghidra:latest
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Build and push Docker image (alpine)
+        id: docker_build_alpine
+        uses: docker/build-push-action@v2
+        with:
+          context: ./alpine
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: |
+            blacktop/ghidra:10-alpine
+            blacktop/ghidra:10.0-alpine
+            blacktop/ghidra:10.0.2-alpine
+            blacktop/ghidra:alpine
+            ghcr.io/blacktop/ghidra:10-alpine
+            ghcr.io/blacktop/ghidra:10.0-alpine
+            ghcr.io/blacktop/ghidra:10.0.2-alpine
+            ghcr.io/blacktop/ghidra:alpine
           labels: ${{ steps.meta.outputs.labels }}
