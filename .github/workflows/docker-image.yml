@@ -6,14 +6,16 @@
 name: Publish Docker image
 
 on:
+  schedule:
+    - cron: '0 10 * * *' # everyday at 10am
   push:
     branches:
       - '**'
     tags:
       - 'v*.*.*'
-  pull_request:
-    branches:
-      - 'master'
+  # pull_request:
+  #   branches:
+  #     - 'master'
 
 jobs:
   push_to_registries:
@@ -51,11 +53,27 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Docker images
+      - name: Build and push Docker image (v9)
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./9
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: |
+            blacktop/ghidra:9
+            blacktop/ghidra:9.2
+            blacktop/ghidra:9.2.4
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Build and push Docker image (v10)
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./10
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: |
+            blacktop/ghidra:10
+            blacktop/ghidra:10.0
+            blacktop/ghidra:10.0.2
+            blacktop/ghidra:latest
           labels: ${{ steps.meta.outputs.labels }}
