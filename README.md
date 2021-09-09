@@ -8,7 +8,7 @@
     <a href="https://hub.docker.com/r/blacktop/ghidra/" alt="Docker Pulls">
           <img src="https://img.shields.io/docker/pulls/blacktop/ghidra.svg" /></a>
     <a href="https://hub.docker.com/r/blacktop/ghidra/" alt="Docker Image">
-          <img src="https://img.shields.io/badge/docker%20image-1.33GB-blue.svg" /></a>
+          <img src="https://img.shields.io/badge/docker%20image-1.41GB-blue.svg" /></a>
     <a href="https://github.com/blacktop/docker-ghidra/actions/workflows/docker-image.yml" alt="Docker CI">
           <img src="https://github.com/blacktop/docker-ghidra/actions/workflows/docker-image.yml/badge.svg" /></a>
 </p>
@@ -25,8 +25,8 @@ Cuz installing Java on your Mac is gross. :smirk:
 
 ```bash
 REPOSITORY               TAG                 SIZE
-blacktop/ghidra          latest              1.33GB
-blacktop/ghidra          10                  1.33GB
+blacktop/ghidra          latest              1.41GB
+blacktop/ghidra          10                  1.41GB
 blacktop/ghidra          10-beta             1.4GB
 blacktop/ghidra          9.2                 1.33GB
 blacktop/ghidra          9.1                 1.18GB

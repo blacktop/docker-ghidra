@@ -20,6 +20,7 @@ RUN echo "[+] Building Ghidra..." \
 WORKDIR /ghidra
 
 RUN echo "[+] Unzip Ghidra..." \
+    && ls -lah /root/git/ghidra/build/dist/ \
     && unzip /root/git/ghidra/build/dist/ghidra_*_linux64.zip -d /tmp \
     && mv /tmp/ghidra_*/* /ghidra \
     && chmod +x /ghidra/ghidraRun \

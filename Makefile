@@ -8,7 +8,7 @@ LATEST ?=$(shell cat LATEST)
 all: build size test
 
 build: ## Build docker image
-	docker build -t $(ORG)/$(NAME):$(BUILD) .
+	docker build -t $(ORG)/$(NAME):$(BUILD) $(BUILD)
 
 build-alpine: ## Build alpine based docker image
 	docker build -t $(ORG)/$(NAME):$(BUILD)-alpine -f Dockerfile.alpine .

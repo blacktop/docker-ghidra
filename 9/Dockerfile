@@ -4,7 +4,7 @@ ENV VERSION 9.2.4_PUBLIC
 ENV GHIDRA_SHA c1f18cdb12e2e1c0313e7becf7f0387226937ac67ad6c6e5056fa889229f969a
 ENV GHIDRA_URL https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_9.2.4_build/ghidra_9.2.4_PUBLIC_20210427.zip
 
-RUN apt-get update && apt-get install -y fontconfig libxrender1 libxtst6 libxi6 wget unzip python-requests --no-install-recommends \
+RUN apt-get update && apt-get install -y fontconfig libxrender1 libxtst6 libxi6 wget unzip python3-requests --no-install-recommends \
     && wget --progress=bar:force -O /tmp/ghidra.zip ${GHIDRA_URL} \
     && echo "$GHIDRA_SHA /tmp/ghidra.zip" | sha256sum -c - \
     && unzip /tmp/ghidra.zip \
