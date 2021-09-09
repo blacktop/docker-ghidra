@@ -9,6 +9,11 @@ RUN echo "[+] Cloning Ghidra..." \
 
 WORKDIR /root/git/ghidra
 
+RUN echo "[+] Create gradle.properties..." \
+    && mkdir .gradle \
+    && echo "org.gradle.jvmargs=-Xmx4608m -XX:MaxPermSize=2048m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8\norg.gradle.daemon=false" > .gradle/gradle.properties
+ENV GRADLE_USER_HOME=/root/git/ghidra/.gradle
+
 RUN echo "[+] Downloading dependencies..." \
     && gradle --init-script gradle/support/fetchDependencies.gradle init
 
@@ -20,9 +25,8 @@ RUN echo "[+] Building Ghidra..." \
 WORKDIR /ghidra
 
 RUN echo "[+] Unzip Ghidra..." \
-    && ls -lah /root/git/ghidra/build/dist/ \
-    && unzip /root/git/ghidra/build/dist/ghidra_*_linux64.zip -d /tmp \
-    && mv /tmp/ghidra_*/* /ghidra \
+    && unzip /root/git/ghidra/build/dist/ghidra*linux*.zip -d /tmp \
+    && mv /tmp/ghidra*/* /ghidra \
     && chmod +x /ghidra/ghidraRun \
     && rm -rf /ghidra/docs /ghidra/Extensions/Eclipse /ghidra/licenses
 
