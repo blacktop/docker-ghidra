@@ -97,7 +97,7 @@ Find a bug? Want more features? Find something missing in the documentation? Let
 
 ## Credits
 
-- NSA Research Directorate [https://www.ghidra-sre.org/](https://www.ghidra-sre.org/)
+- NSA Research Directorate [https://github.com/NationalSecurityAgency/ghidra](https://github.com/NationalSecurityAgency/ghidra)
 
 ### License
 
