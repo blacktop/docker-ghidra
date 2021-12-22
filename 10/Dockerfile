@@ -1,8 +1,8 @@
 FROM openjdk:11-jdk-slim
 
-ENV VERSION 10.1_PUBLIC
-ENV GHIDRA_SHA 99139c4a63a81135b3b63fe9997a012a6394a766c2c7f2ac5115ab53912d2a6c
-ENV GHIDRA_URL https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_10.1_build/ghidra_10.1_PUBLIC_20211210.zip
+ENV VERSION 10.1.1_PUBLIC
+ENV GHIDRA_SHA d4ee61ed669cec7e20748462f57f011b84b1e8777b327704f1646c0d47a5a0e8
+ENV GHIDRA_URL https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_10.1.1_build/ghidra_10.1.1_PUBLIC_20211221.zip
 
 RUN apt-get update && apt-get install -y fontconfig libxrender1 libxtst6 libxi6 wget unzip python3-requests --no-install-recommends \
     && wget --progress=bar:force -O /tmp/ghidra.zip ${GHIDRA_URL} \
