@@ -1,8 +1,8 @@
 FROM alpine:3.14
 
-ENV VERSION 10.1.1_PUBLIC
-ENV GHIDRA_SHA d4ee61ed669cec7e20748462f57f011b84b1e8777b327704f1646c0d47a5a0e8
-ENV GHIDRA_URL https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_10.1.1_build/ghidra_10.1.1_PUBLIC_20211221.zip
+ENV VERSION 10.1.2_PUBLIC
+ENV GHIDRA_SHA ac96fbdde7f754e0eb9ed51db020e77208cdb12cf58c08657a2ab87cb2694940
+ENV GHIDRA_URL https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_10.1.2_build/ghidra_10.1.2_PUBLIC_20220125.zip
 
 RUN apk add --no-cache openjdk11-jre bash
 
