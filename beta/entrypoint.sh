@@ -6,6 +6,7 @@ if [ "$1" = 'server' ]; then
   shift
   # Add users
   GHIDRA_USERS=${GHIDRA_USERS:-admin}
+  GHIDRA_IP=${GHIDRA_IP:-0.0.0.0}
   if [ ! -e "/repos/users" ] && [ ! -z "${GHIDRA_USERS}" ]; then
     mkdir -p /repos/~admin
     for user in ${GHIDRA_USERS}; do
