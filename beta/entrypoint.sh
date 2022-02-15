@@ -7,11 +7,28 @@ if [ "$1" = 'server' ]; then
   # Add users
   GHIDRA_USERS=${GHIDRA_USERS:-admin}
   GHIDRA_IP=${GHIDRA_IP:-0.0.0.0}
-  if [ ! -e "/repos/users" ] && [ ! -z "${GHIDRA_USERS}" ]; then
+  
+  if [ -e "/repos/users" ]; then
+    SAVEIFS=$IFS   # Save current IFS (Internal Field Separator)
+    IFS=$'\n'      # Change IFS to newline char
+    existing_users=$(cut -d ':' -f 1 /repos/users) #get list of existing users
+    IFS=$SAVEIFS   # Restore original IFS
+  else
+    existing_users=()
+  fi
+  if [[ ! -z "${GHIDRA_USERS}" ]]; then
     mkdir -p /repos/~admin
     for user in ${GHIDRA_USERS}; do
-      echo "Adding user: ${user}"
-      echo "-add ${user}" >> /repos/~admin/adm.cmd
+      if [[ ! ${existing_users} =~ ${user} ]]; then
+        echo "Adding user: ${user}"
+        echo "-add ${user}" >> /repos/~admin/adm.cmd
+      fi
+    done
+    for user in ${existing_users}; do
+      if [[ ! ${GHIDRA_USERS} =~ ${user} ]]; then
+        echo "Removing user: ${user}"
+        echo "-remove ${user}" >> /repos/~admin/adm.cmd
+      fi
     done
   fi
   #----------------------------------------
