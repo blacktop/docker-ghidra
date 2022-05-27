@@ -62,6 +62,9 @@ server: stop-server ## Run ghidra server
 	@docker run --init -d --name $(NAME)-server \
              --cpus="2" \
              --memory="4g" \
+             -p 13100:13100 \
+             -p 13101:13101 \
+             -p 13102:13102 \
 			 -e GHIDRA_USERS="root blackop" \
              $(ORG)/$(NAME):$(BUILD) server
 

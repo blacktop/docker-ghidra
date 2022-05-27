@@ -5,8 +5,9 @@ set -e
 if [ "$1" = 'server' ]; then
   shift
   # Add users
-  GHIDRA_USERS=${GHIDRA_USERS:-admin}
   GHIDRA_IP=${GHIDRA_IP:-0.0.0.0}
+  echo "GHIDRA_IP: $GHIDRA_IP"
+  GHIDRA_USERS=${GHIDRA_USERS:-admin}
   if [ ! -e "/repos/users" ] && [ ! -z "${GHIDRA_USERS}" ]; then
     mkdir -p /repos/~admin
     for user in ${GHIDRA_USERS}; do
@@ -17,7 +18,7 @@ if [ "$1" = 'server' ]; then
   #----------------------------------------
   # Ghidra Server launch
   #----------------------------------------
-  exec "/ghidra/server/ghidraSvr" console
+  exec env GHIDRA_IP=${GHIDRA_IP} "/ghidra/server/ghidraSvr" console
 
 elif [ "$1" = 'client' ]; then
   shift

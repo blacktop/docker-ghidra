@@ -86,6 +86,23 @@ $ docker run --init -it --rm \
              blacktop/ghidra:beta support/analyzeHeadless ghidra://ghidra-server:13100/Apple/12.4.1/ -import /samples/dyld_shared_cache -connect blacktop -p -commit "Loading Dyld."
 ```
 
+> **Note**
+> To run just the server _(and connect from other GUI clients etc)_ you must expose the ports
+
+```bash
+$ docker run --init -it --rm \
+             --name ghidra-server \
+             --cpus 2 \
+             --memory 500m \
+             -p 13100:13100 \
+             -p 13101:13101 \
+             -p 13102:13102 \
+             -e MAXMEM=500M \
+             -e GHIDRA_USERS="root blacktop" \
+             -v /path/to/repos:/repos \
+             blacktop/ghidra server
+```
+
 ## TODO
 
 - [ ] Figure out how to add `--network none` :wink:
