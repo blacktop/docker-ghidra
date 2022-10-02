@@ -68,6 +68,9 @@ $ docker run --init -it --rm \
              --cpus 2 \
              --memory 500m \
              -e MAXMEM=500M \
+             -p 13100:13100 \
+             -p 13101:13101 \
+             -p 13102:13102 \             
              -e GHIDRA_USERS="root blacktop" \
              -v /path/to/repos:/repos \
              blacktop/ghidra server
