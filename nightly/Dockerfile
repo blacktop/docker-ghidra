@@ -1,4 +1,4 @@
-FROM gradle:jdk11 as builder
+FROM gradle:jdk17 as builder
 
 ENV GITHUB_URL https://github.com/NationalSecurityAgency/ghidra.git
 
@@ -8,11 +8,6 @@ RUN echo "[+] Cloning Ghidra..." \
     && git clone ${GITHUB_URL} /root/git/ghidra
 
 WORKDIR /root/git/ghidra
-
-RUN echo "[+] Create gradle.properties..." \
-    && mkdir .gradle \
-    && echo "org.gradle.jvmargs=-Xmx4608m -XX:MaxPermSize=2048m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8\norg.gradle.daemon=false" > .gradle/gradle.properties
-ENV GRADLE_USER_HOME=/root/git/ghidra/.gradle
 
 RUN echo "[+] Downloading dependencies..." \
     && gradle --init-script gradle/support/fetchDependencies.gradle init
@@ -31,7 +26,7 @@ RUN echo "[+] Unzip Ghidra..." \
     && rm -rf /ghidra/docs /ghidra/Extensions/Eclipse /ghidra/licenses
 
 ##########################################################################################
-FROM openjdk:11-jdk-slim
+FROM openjdk:17-jdk-slim
 
 LABEL maintainer "https://github.com/blacktop"
 
