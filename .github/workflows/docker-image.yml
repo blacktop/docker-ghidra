@@ -69,7 +69,7 @@ jobs:
             blacktop/ghidra:9
             blacktop/ghidra:9.2
             blacktop/ghidra:9.2.4
-          platforms: linux/amd64 # No native binaries included or build script        
+          platforms: linux/amd64 # No native binaries or binary build script included
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push Docker image (v10)
