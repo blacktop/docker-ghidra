@@ -1,4 +1,7 @@
-FROM eclipse-temurin:17
+# Compile binaries for arm support:
+FROM gradle:jdk17 as builder
+
+RUN apt-get update && apt-get install -y curl git bison flex build-essential unzip
 
 ENV VERSION 10.2.1_PUBLIC
 ENV GHIDRA_SHA f683cfbb583641d27f9dca3c1a59b4172ecd10155d8771bbb28a2e0eaa7c80bb
@@ -15,10 +18,21 @@ RUN apt-get update && apt-get install -y fontconfig libxrender1 libxtst6 libxi6 
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives /tmp/* /var/tmp/* /ghidra/docs /ghidra/Extensions/Eclipse /ghidra/licenses
 
-WORKDIR /ghidra
+RUN /ghidra/support/buildNatives
+
+##########################################################################################
+FROM eclipse-temurin:17
+
+RUN apt-get update && apt-get install -y fontconfig libxrender1 libxtst6 libxi6 --no-install-recommends \
+    && echo "===> Clean up unnecessary files..." \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives /tmp/* /var/tmp/*
 
 COPY entrypoint.sh /entrypoint.sh
+COPY --from=builder /ghidra /ghidra
 COPY server.conf /ghidra/server/server.conf
+
+WORKDIR /ghidra
 
 EXPOSE 13100 13101 13102
 RUN mkdir /repos
