@@ -19,7 +19,7 @@ Cuz installing Java on your Mac is gross. :smirk:
 
 ## Dependencies
 
-- [openjdk:jdk-slim](https://hub.docker.com/_/openjdk)
+- [eclipse-temurin](https://hub.docker.com/_/eclipse-temurin)
 
 ## Image Tags
 
