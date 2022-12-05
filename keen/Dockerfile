@@ -1,4 +1,4 @@
-FROM openjdk:11-jdk-slim
+FROM eclipse-temurin:11
 
 ENV VERSION 10.1.2_PUBLIC
 ENV GHIDRA_SHA ac96fbdde7f754e0eb9ed51db020e77208cdb12cf58c08657a2ab87cb2694940

@@ -26,7 +26,7 @@ RUN echo "[+] Unzip Ghidra..." \
     && rm -rf /ghidra/docs /ghidra/Extensions/Eclipse /ghidra/licenses
 
 ##########################################################################################
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17
 
 LABEL maintainer "https://github.com/blacktop"
 

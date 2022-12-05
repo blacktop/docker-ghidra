@@ -19,7 +19,7 @@ Cuz installing Java on your Mac is gross. :smirk:
 
 ## Dependencies
 
-- [openjdk:jdk-slim](https://hub.docker.com/_/openjdk)
+- [eclipse-temurin](https://hub.docker.com/_/eclipse-temurin)
 
 ## Image Tags
 
@@ -111,6 +111,10 @@ $ docker run --init -it --rm \
 ## Issues
 
 Find a bug? Want more features? Find something missing in the documentation? Let me know! Please don't hesitate to [file an issue](https://github.com/blacktop/docker-ghidra/issues/new)
+
+### Black Background Issue
+
+If the Ghidra opens in XQuartz with a black background, try closing XQuartz, executing `defaults write org.xquartz.X11 enable_render_extension 0` in terminal. See [issue #31](https://github.com/XQuartz/XQuartz/issues/31) on XQuartz GitHub repo for more information.
 
 ## Credits
 

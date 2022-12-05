@@ -31,7 +31,7 @@ elif [ "$1" = 'client' ]; then
   # the physical memory available to the OS. Uncomment MAXMEM setting if non-default value is needed.
   MAXMEM=${MAXMEM:-768M}
   # Launch Ghidra
-  exec "${SCRIPT_DIR}"/support/launch.sh fg Ghidra $MAXMEM "" ghidra.GhidraRun "$@"
+  exec "${SCRIPT_DIR}"/support/launch.sh fg jre Ghidra $MAXMEM "" ghidra.GhidraRun "$@"
 fi
 
 exec "$@"
