@@ -105,5 +105,5 @@ jobs:
             ghcr.io/blacktop/ghidra:10.2-alpine
             ghcr.io/blacktop/ghidra:10.2.1-alpine
             ghcr.io/blacktop/ghidra:alpine
-          platforms: linux/amd64 # TODO support arm in alpine
+          platforms: linux/amd64,linux/arm64
           labels: ${{ steps.meta.outputs.labels }}
