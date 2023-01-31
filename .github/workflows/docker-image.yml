@@ -61,7 +61,7 @@ jobs:
 
       - name: Build and push Docker image (v9)
         id: docker_build_9
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: ./9
           push: ${{ github.event_name != 'pull_request' }}
@@ -74,7 +74,7 @@ jobs:
 
       - name: Build and push Docker image (v10)
         id: docker_build_10
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: ./10
           push: ${{ github.event_name != 'pull_request' }}
@@ -92,7 +92,7 @@ jobs:
 
       - name: Build and push Docker image (alpine)
         id: docker_build_alpine
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: ./alpine
           push: ${{ github.event_name != 'pull_request' }}
