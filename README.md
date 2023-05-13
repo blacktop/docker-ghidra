@@ -25,8 +25,8 @@ Cuz installing Java on your Mac is gross. :smirk:
 
 ```bash
 REPOSITORY               TAG                 SIZE
-blacktop/ghidra          latest              1.41GB
-blacktop/ghidra          10                  1.41GB
+blacktop/ghidra          latest              1.45GB
+blacktop/ghidra          10                  1.45GB
 blacktop/ghidra          10-beta             1.4GB
 blacktop/ghidra          9.2                 1.33GB
 blacktop/ghidra          9.1                 1.18GB
