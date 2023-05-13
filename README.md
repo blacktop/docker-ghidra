@@ -8,7 +8,7 @@
     <a href="https://hub.docker.com/r/blacktop/ghidra/" alt="Docker Pulls">
           <img src="https://img.shields.io/docker/pulls/blacktop/ghidra.svg" /></a>
     <a href="https://hub.docker.com/r/blacktop/ghidra/" alt="Docker Image">
-          <img src="https://img.shields.io/badge/docker%20image-1.41GB-blue.svg" /></a>
+          <img src="https://img.shields.io/badge/docker%20image-1.45GB-blue.svg" /></a>
     <a href="https://github.com/blacktop/docker-ghidra/actions/workflows/docker-image.yml" alt="Docker CI">
           <img src="https://github.com/blacktop/docker-ghidra/actions/workflows/docker-image.yml/badge.svg" /></a>
 </p>
