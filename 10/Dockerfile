@@ -3,7 +3,7 @@ FROM gradle:jdk17 as builder
 
 RUN apt-get update && apt-get install -y curl git bison flex build-essential unzip
 
-ENV VERSION 10.2.3_PUBLIC
+ENV VERSION 10.3_PUBLIC
 ENV GHIDRA_SHA 4e990af9b22be562769bb6ce5d4d609fbb45455a7a2f756167b8cdcdb75887fc
 ENV GHIDRA_URL https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_10.3_build/ghidra_10.3_PUBLIC_20230510.zip
 
