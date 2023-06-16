@@ -85,7 +85,7 @@ jobs:
             blacktop/ghidra:latest
             ghcr.io/blacktop/ghidra:10
             ghcr.io/blacktop/ghidra:10.3
-            ghcr.io/blacktop/ghidra:10.3.0
+            ghcr.io/blacktop/ghidra:10.3.1
             ghcr.io/blacktop/ghidra:latest
           platforms: linux/amd64,linux/arm64       
           labels: ${{ steps.meta.outputs.labels }}
