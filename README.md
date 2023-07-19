@@ -116,6 +116,25 @@ Find a bug? Want more features? Find something missing in the documentation? Let
 
 If the Ghidra opens in XQuartz with a black background, try closing XQuartz, executing `defaults write org.xquartz.X11 enable_render_extension 0` in terminal. See [issue #31](https://github.com/XQuartz/XQuartz/issues/31) on XQuartz GitHub repo for more information.
 
+### Running on Ubuntu host
+
+An example on how to run ghidra on Ubuntu *(18.04)* host
+
+```bash
+docker run --init -it --rm \
+            --name ghidra \
+            --cpus 2 \
+            --memory 4g \
+            -e MAXMEM=4G \
+            -e DISPLAY=$DISPLAY \
+            -h $HOSTNAME \
+            -v /tmp/.X11-unix:/tmp/.X11-unix \
+            -v /tmp/samples:/samples \
+            -v /tmp/root:/root \
+            -v $HOME/.Xauthority:/root/.Xauthority \
+            blacktop/ghidra
+```
+
 ## Credits
 
 - NSA Research Directorate [https://github.com/NationalSecurityAgency/ghidra](https://github.com/NationalSecurityAgency/ghidra)
