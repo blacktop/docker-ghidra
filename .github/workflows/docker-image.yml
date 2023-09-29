@@ -80,12 +80,12 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
             blacktop/ghidra:10
-            blacktop/ghidra:10.3
-            blacktop/ghidra:10.3.3
+            blacktop/ghidra:10.4
+            blacktop/ghidra:10.4.0
             blacktop/ghidra:latest
             ghcr.io/blacktop/ghidra:10
-            ghcr.io/blacktop/ghidra:10.3
-            ghcr.io/blacktop/ghidra:10.3.3
+            ghcr.io/blacktop/ghidra:10.4
+            ghcr.io/blacktop/ghidra:10.4.0
             ghcr.io/blacktop/ghidra:latest
           platforms: linux/amd64,linux/arm64
           labels: ${{ steps.meta.outputs.labels }}
@@ -98,12 +98,12 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
             blacktop/ghidra:10-alpine
-            blacktop/ghidra:10.3-alpine
-            blacktop/ghidra:10.3.3-alpine
+            blacktop/ghidra:10.4-alpine
+            blacktop/ghidra:10.4.0-alpine
             blacktop/ghidra:alpine
             ghcr.io/blacktop/ghidra:10-alpine
-            ghcr.io/blacktop/ghidra:10.3-alpine
-            ghcr.io/blacktop/ghidra:10.3.3-alpine
+            ghcr.io/blacktop/ghidra:10.4-alpine
+            ghcr.io/blacktop/ghidra:10.4.0-alpine
             ghcr.io/blacktop/ghidra:alpine
           platforms: linux/amd64,linux/arm64
           labels: ${{ steps.meta.outputs.labels }}
