@@ -82,10 +82,26 @@ jobs:
             blacktop/ghidra:10
             blacktop/ghidra:10.4
             blacktop/ghidra:10.4.0
-            blacktop/ghidra:latest
             ghcr.io/blacktop/ghidra:10
             ghcr.io/blacktop/ghidra:10.4
             ghcr.io/blacktop/ghidra:10.4.0
+          platforms: linux/amd64,linux/arm64
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Build and push Docker image (v11)
+        id: docker_build_11
+        uses: docker/build-push-action@v5
+        with:
+          context: ./11
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: |
+            blacktop/ghidra:11
+            blacktop/ghidra:11.0
+            blacktop/ghidra:11.0.0
+            blacktop/ghidra:latest
+            ghcr.io/blacktop/ghidra:11
+            ghcr.io/blacktop/ghidra:11.0
+            ghcr.io/blacktop/ghidra:11.0.0
             ghcr.io/blacktop/ghidra:latest
           platforms: linux/amd64,linux/arm64
           labels: ${{ steps.meta.outputs.labels }}
@@ -97,13 +113,13 @@ jobs:
           context: ./alpine
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
-            blacktop/ghidra:10-alpine
-            blacktop/ghidra:10.4-alpine
-            blacktop/ghidra:10.4.0-alpine
+            blacktop/ghidra:11-alpine
+            blacktop/ghidra:11.0-alpine
+            blacktop/ghidra:11.0.0-alpine
             blacktop/ghidra:alpine
-            ghcr.io/blacktop/ghidra:10-alpine
-            ghcr.io/blacktop/ghidra:10.4-alpine
-            ghcr.io/blacktop/ghidra:10.4.0-alpine
+            ghcr.io/blacktop/ghidra:11-alpine
+            ghcr.io/blacktop/ghidra:11.0-alpine
+            ghcr.io/blacktop/ghidra:11.0.0-alpine
             ghcr.io/blacktop/ghidra:alpine
           platforms: linux/amd64,linux/arm64
           labels: ${{ steps.meta.outputs.labels }}
