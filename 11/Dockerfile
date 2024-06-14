@@ -3,9 +3,9 @@ FROM gradle:jdk17 as builder
 
 RUN apt-get update && apt-get install -y curl git bison flex build-essential unzip
 
-ENV VERSION 11.1_PUBLIC
-ENV GHIDRA_SHA 293f60e04fa480315d2c467f4b2b4b10b3b6b5c8a8416bf7167fe082406e3be8
-ENV GHIDRA_URL https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_11.1_build/ghidra_11.1_PUBLIC_20240607.zip
+ENV VERSION 11.1.1_PUBLIC
+ENV GHIDRA_SHA 7fe8d9a6e7e5267f3cf487a0c046b21fb08d7a602facaa2e81ac2f09b5df2866
+ENV GHIDRA_URL https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_11.1.1_build/ghidra_11.1.1_PUBLIC_20240614.zip
 
 RUN apt-get update && apt-get install -y fontconfig libxrender1 libxtst6 libxi6 wget unzip python3-requests --no-install-recommends \
     && wget --progress=bar:force -O /tmp/ghidra.zip ${GHIDRA_URL} \

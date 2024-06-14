@@ -101,7 +101,7 @@ jobs:
             blacktop/ghidra:latest
             ghcr.io/blacktop/ghidra:11
             ghcr.io/blacktop/ghidra:11.1
-            ghcr.io/blacktop/ghidra:11.1.0
+            ghcr.io/blacktop/ghidra:11.1.1
             ghcr.io/blacktop/ghidra:latest
           platforms: linux/amd64,linux/arm64
           labels: ${{ steps.meta.outputs.labels }}
@@ -119,7 +119,7 @@ jobs:
             blacktop/ghidra:alpine
             ghcr.io/blacktop/ghidra:11-alpine
             ghcr.io/blacktop/ghidra:11.1-alpine
-            ghcr.io/blacktop/ghidra:11.1.0-alpine
+            ghcr.io/blacktop/ghidra:11.1.1-alpine
             ghcr.io/blacktop/ghidra:alpine
           platforms: linux/amd64,linux/arm64
           labels: ${{ steps.meta.outputs.labels }}
