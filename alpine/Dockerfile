@@ -1,5 +1,5 @@
 # Compile binaries for arm support:
-FROM gradle:jdk17 as builder
+FROM gradle:jdk21 as builder
 
 RUN apt-get update && apt-get install -y curl git bison flex build-essential unzip
 
@@ -21,9 +21,9 @@ RUN apt-get update && apt-get install -y fontconfig libxrender1 libxtst6 libxi6 
 RUN /ghidra/support/buildNatives
 
 ##########################################################################################
-FROM alpine:3.17
+FROM alpine:3.20
 
-RUN apk add --no-cache openjdk17-jre bash
+RUN apk add --no-cache openjdk21-jre bash
 RUN apk add --no-cache -t .build-deps ca-certificates
 
 COPY --from=builder /ghidra /ghidra
