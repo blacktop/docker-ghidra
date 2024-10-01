@@ -1,4 +1,4 @@
-FROM gradle:jdk17 as builder
+FROM gradle:jdk21 as builder
 
 ENV GITHUB_URL https://github.com/NationalSecurityAgency/ghidra.git
 
@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y curl git bison flex build-essential unz
 RUN echo "[+] Cloning Ghidra..." \
     && git clone ${GITHUB_URL} /root/git/ghidra
 
-WORKDIR /root/git/ghidra
+WORKDIR /root/git/ghidra/support/gradle/
 
 RUN echo "[+] Downloading dependencies..." \
     && gradle --init-script gradle/support/fetchDependencies.gradle init
@@ -26,7 +26,7 @@ RUN echo "[+] Unzip Ghidra..." \
     && rm -rf /ghidra/docs /ghidra/Extensions/Eclipse /ghidra/licenses
 
 ##########################################################################################
-FROM eclipse-temurin:17
+FROM eclipse-temurin:21
 
 LABEL maintainer "https://github.com/blacktop"
 
