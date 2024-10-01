@@ -10,7 +10,7 @@ RUN echo "[+] Cloning Ghidra..." \
 WORKDIR /root/git/ghidra/support/gradle/
 
 RUN echo "[+] Downloading dependencies..." \
-    && gradle --init-script gradle/support/fetchDependencies.gradle init
+    && gradle --init-script fetchDependencies.gradle init
 
 RUN echo "[+] Building Ghidra..." \
     && gradle buildNatives_linux64 \

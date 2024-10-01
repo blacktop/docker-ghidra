@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y fontconfig libxrender1 libxtst6 libxi6 
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives /tmp/* /var/tmp/* /ghidra/docs /ghidra/Extensions/Eclipse /ghidra/licenses
 
-WORKDIR /ghidra/support/gradle/
+WORKDIR /ghidra/support/gradle
 
 RUN gradle buildNatives
 
