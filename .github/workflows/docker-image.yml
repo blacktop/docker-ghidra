@@ -59,34 +59,34 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Docker image (v9)
-        id: docker_build_9
-        uses: docker/build-push-action@v6
-        with:
-          context: ./9
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: |
-            blacktop/ghidra:9
-            blacktop/ghidra:9.2
-            blacktop/ghidra:9.2.4
-          platforms: linux/amd64 # No native binaries or binary build script included
-          labels: ${{ steps.meta.outputs.labels }}
+      # - name: Build and push Docker image (v9)
+      #   id: docker_build_9
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: ./9
+      #     push: ${{ github.event_name != 'pull_request' }}
+      #     tags: |
+      #       blacktop/ghidra:9
+      #       blacktop/ghidra:9.2
+      #       blacktop/ghidra:9.2.4
+      #     platforms: linux/amd64 # No native binaries or binary build script included
+      #     labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Build and push Docker image (v10)
-        id: docker_build_10
-        uses: docker/build-push-action@v6
-        with:
-          context: ./10
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: |
-            blacktop/ghidra:10
-            blacktop/ghidra:10.4
-            blacktop/ghidra:10.4.0
-            ghcr.io/blacktop/ghidra:10
-            ghcr.io/blacktop/ghidra:10.4
-            ghcr.io/blacktop/ghidra:10.4.0
-          platforms: linux/amd64,linux/arm64
-          labels: ${{ steps.meta.outputs.labels }}
+      # - name: Build and push Docker image (v10)
+      #   id: docker_build_10
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: ./10
+      #     push: ${{ github.event_name != 'pull_request' }}
+      #     tags: |
+      #       blacktop/ghidra:10
+      #       blacktop/ghidra:10.4
+      #       blacktop/ghidra:10.4.0
+      #       ghcr.io/blacktop/ghidra:10
+      #       ghcr.io/blacktop/ghidra:10.4
+      #       ghcr.io/blacktop/ghidra:10.4.0
+      #     platforms: linux/amd64,linux/arm64
+      #     labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push Docker image (v11)
         id: docker_build_11
