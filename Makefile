@@ -11,7 +11,7 @@ build: ## Build docker image
 	docker build -t $(ORG)/$(NAME):$(BUILD) $(BUILD)
 
 build-alpine: ## Build alpine based docker image
-	docker build -t $(ORG)/$(NAME):$(BUILD)-alpine -f Dockerfile.alpine .
+	docker build -t $(ORG)/$(NAME):$(BUILD)-alpine alpine
 
 build-beta: ## Build beta based docker image
 	docker build -t $(ORG)/$(NAME):beta -f Dockerfile.beta .

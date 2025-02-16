@@ -1,11 +1,11 @@
 # Compile binaries for arm support:
-FROM gradle:jdk21 as builder
+FROM gradle:jdk21 AS builder
 
 RUN apt-get update && apt-get install -y curl git bison flex build-essential unzip
 
-ENV VERSION 11.2.1_PUBLIC
-ENV GHIDRA_SHA 73b42cec587f370bfef49809ae55d2c7a3db689e8f164a1e7d7b8de295b6359f
-ENV GHIDRA_URL https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_11.3_build/ghidra_11.3_PUBLIC_20250205.zip
+ENV VERSION=11.3_PUBLIC
+ENV GHIDRA_SHA=73b42cec587f370bfef49809ae55d2c7a3db689e8f164a1e7d7b8de295b6359f
+ENV GHIDRA_URL=https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_11.3_build/ghidra_11.3_PUBLIC_20250205.zip
 
 RUN apt-get update && apt-get install -y fontconfig libxrender1 libxtst6 libxi6 wget unzip python3-requests --no-install-recommends \
     && wget --progress=bar:force -O /tmp/ghidra.zip ${GHIDRA_URL} \
@@ -23,7 +23,7 @@ WORKDIR /ghidra/support/gradle/
 RUN gradle buildNatives
 
 ##########################################################################################
-FROM alpine:3.20
+FROM alpine:3.21
 
 RUN apk add --no-cache openjdk21-jre bash
 RUN apk add --no-cache -t .build-deps ca-certificates
