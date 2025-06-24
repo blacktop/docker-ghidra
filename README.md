@@ -139,6 +139,9 @@ docker run --init -it --rm \
 
 - NSA Research Directorate [https://github.com/NationalSecurityAgency/ghidra](https://github.com/NationalSecurityAgency/ghidra)
 
+> [!NOTE]  
+> Ghidra added support for building Docker containers in **v11.4** [docker/README.md](https://github.com/NationalSecurityAgency/ghidra/blob/Ghidra_11.4_build/docker/README.md)
+
 ### License
 
 Apache License (Version 2.0)
