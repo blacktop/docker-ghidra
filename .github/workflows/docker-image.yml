@@ -97,11 +97,11 @@ jobs:
           tags: |
             blacktop/ghidra:11
             blacktop/ghidra:11.4
-            blacktop/ghidra:11.4.1
+            blacktop/ghidra:11.4.2
             blacktop/ghidra:latest
             ghcr.io/blacktop/ghidra:11
             ghcr.io/blacktop/ghidra:11.4
-            ghcr.io/blacktop/ghidra:11.4.1
+            ghcr.io/blacktop/ghidra:11.4.2
             ghcr.io/blacktop/ghidra:latest
           platforms: linux/amd64,linux/arm64
           labels: ${{ steps.meta.outputs.labels }}
@@ -115,11 +115,11 @@ jobs:
           tags: |
             blacktop/ghidra:11-alpine
             blacktop/ghidra:11.4-alpine
-            blacktop/ghidra:11.4.1-alpine
+            blacktop/ghidra:11.4.2-alpine
             blacktop/ghidra:alpine
             ghcr.io/blacktop/ghidra:11-alpine
             ghcr.io/blacktop/ghidra:11.4-alpine
-            ghcr.io/blacktop/ghidra:11.4.1-alpine
+            ghcr.io/blacktop/ghidra:11.4.2-alpine
             ghcr.io/blacktop/ghidra:alpine
           platforms: linux/amd64,linux/arm64
           labels: ${{ steps.meta.outputs.labels }}
