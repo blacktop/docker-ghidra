@@ -18,31 +18,23 @@ RUN apt-get update && apt-get install -y fontconfig libxrender1 libxtst6 libxi6 
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives /tmp/* /var/tmp/* /ghidra/docs /ghidra/Extensions/Eclipse /ghidra/licenses
 
-WORKDIR /ghidra/support/gradle/
+WORKDIR /ghidra/support/gradle
 
 RUN gradle buildNatives
 
 ##########################################################################################
-FROM alpine:3.21
+FROM eclipse-temurin:21
 
-RUN apk add --no-cache openjdk21-jre bash
-RUN apk add --no-cache -t .build-deps ca-certificates
-
-COPY --from=builder /ghidra /ghidra
-RUN chmod +x /ghidra/ghidraRun \
+RUN apt-get update && apt-get install -y fontconfig libxrender1 libxtst6 libxi6 --no-install-recommends \
     && echo "===> Clean up unnecessary files..." \
-    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives /tmp/* /var/tmp/* \
-    && rm -rf /ghidra/docs \
-    && rm -rf /ghidra/licenses \
-    && rm -rf /ghidra/Extensions/Ghidra \
-    && rm -rf /ghidra/Extensions/Eclipse \
-    && find /ghidra -type f -name "*src*.zip" -exec rm -f {} \; \
-    && apk del --purge .build-deps
-
-WORKDIR /ghidra
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives /tmp/* /var/tmp/*
 
 COPY entrypoint.sh /entrypoint.sh
+COPY --from=builder /ghidra /ghidra
 COPY server.conf /ghidra/server/server.conf
+
+WORKDIR /ghidra
 
 EXPOSE 13100 13101 13102
 RUN mkdir /repos

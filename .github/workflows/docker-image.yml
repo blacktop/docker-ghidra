@@ -82,20 +82,38 @@ jobs:
       #     platforms: linux/amd64,linux/arm64
       #     labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Build and push Docker image (v11)
-        id: docker_build_11
+      # - name: Build and push Docker image (v11)
+      #   id: docker_build_11
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: ./11
+      #     push: ${{ github.event_name != 'pull_request' }}
+      #     tags: |
+      #       blacktop/ghidra:11
+      #       blacktop/ghidra:11.4
+      #       blacktop/ghidra:11.4.3
+      #       blacktop/ghidra:latest
+      #       ghcr.io/blacktop/ghidra:11
+      #       ghcr.io/blacktop/ghidra:11.4
+      #       ghcr.io/blacktop/ghidra:11.4.3
+      #       ghcr.io/blacktop/ghidra:latest
+      #     platforms: linux/amd64,linux/arm64
+      #     labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Build and push Docker image (v12)
+        id: docker_build_12
         uses: docker/build-push-action@v6
         with:
-          context: ./11
+          context: ./12
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
-            blacktop/ghidra:11
-            blacktop/ghidra:11.4
-            blacktop/ghidra:11.4.3
+            blacktop/ghidra:12
+            blacktop/ghidra:12.0
+            blacktop/ghidra:12.0.0
             blacktop/ghidra:latest
-            ghcr.io/blacktop/ghidra:11
-            ghcr.io/blacktop/ghidra:11.4
-            ghcr.io/blacktop/ghidra:11.4.3
+            ghcr.io/blacktop/ghidra:12
+            ghcr.io/blacktop/ghidra:12.0
+            ghcr.io/blacktop/ghidra:12.0.0
             ghcr.io/blacktop/ghidra:latest
           platforms: linux/amd64,linux/arm64
           labels: ${{ steps.meta.outputs.labels }}
@@ -107,13 +125,13 @@ jobs:
           context: ./alpine
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
-            blacktop/ghidra:11-alpine
-            blacktop/ghidra:11.4-alpine
-            blacktop/ghidra:11.4.3-alpine
+            blacktop/ghidra:12-alpine
+            blacktop/ghidra:12.0-alpine
+            blacktop/ghidra:12.0.0-alpine
             blacktop/ghidra:alpine
-            ghcr.io/blacktop/ghidra:11-alpine
-            ghcr.io/blacktop/ghidra:11.4-alpine
-            ghcr.io/blacktop/ghidra:11.4.3-alpine
+            ghcr.io/blacktop/ghidra:12-alpine
+            ghcr.io/blacktop/ghidra:12.0-alpine
+            ghcr.io/blacktop/ghidra:12.0.0-alpine
             ghcr.io/blacktop/ghidra:alpine
           platforms: linux/amd64,linux/arm64
           labels: ${{ steps.meta.outputs.labels }}
