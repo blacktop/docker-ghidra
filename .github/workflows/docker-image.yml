@@ -11,16 +11,6 @@ on:
       - "**"
     tags:
       - "v*.*.*"
-  workflow_dispatch:
-    inputs:
-      release:
-        description: "Release tag set to publish"
-        required: true
-        default: "12.1"
-        type: choice
-        options:
-          - "12.1"
-          - "12.0.4"
   # pull_request:
   #   branches:
   #     - 'master'
@@ -34,15 +24,7 @@ jobs:
       contents: read
     steps:
       - name: Check out the repo
-        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.release == '12.0.4') }}
         uses: actions/checkout@v6
-
-      - name: Check out the v12.0.4 source
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.release == '12.0.4' }}
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          ref: ba024c4f23aaad0076b50fce6057cc3815263115
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
@@ -119,7 +101,6 @@ jobs:
       #     labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push Docker image (v12.1)
-        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.release == '12.0.4') }}
         id: docker_build_12
         uses: docker/build-push-action@v7
         with:
@@ -138,7 +119,6 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push Docker image (v12.1 alpine)
-        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.release == '12.0.4') }}
         id: docker_build_alpine
         uses: docker/build-push-action@v7
         with:
@@ -153,35 +133,5 @@ jobs:
             ghcr.io/blacktop/ghidra:12.1-alpine
             ghcr.io/blacktop/ghidra:12.1.0-alpine
             ghcr.io/blacktop/ghidra:alpine
-          platforms: linux/amd64,linux/arm64
-          labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Restore Docker image tags (v12.0.4)
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.release == '12.0.4' }}
-        id: docker_restore_12_0_4
-        uses: docker/build-push-action@v7
-        with:
-          context: ./12
-          push: true
-          tags: |
-            blacktop/ghidra:12.0
-            blacktop/ghidra:12.0.4
-            ghcr.io/blacktop/ghidra:12.0
-            ghcr.io/blacktop/ghidra:12.0.4
-          platforms: linux/amd64,linux/arm64
-          labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Restore Docker image tags (v12.0.4 alpine)
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.release == '12.0.4' }}
-        id: docker_restore_alpine_12_0_4
-        uses: docker/build-push-action@v7
-        with:
-          context: ./alpine
-          push: true
-          tags: |
-            blacktop/ghidra:12.0-alpine
-            blacktop/ghidra:12.0.4-alpine
-            ghcr.io/blacktop/ghidra:12.0-alpine
-            ghcr.io/blacktop/ghidra:12.0.4-alpine
           platforms: linux/amd64,linux/arm64
           labels: ${{ steps.meta.outputs.labels }}
