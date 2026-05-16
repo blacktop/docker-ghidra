@@ -34,9 +34,15 @@ jobs:
       contents: read
     steps:
       - name: Check out the repo
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.release == '12.0.4') }}
+        uses: actions/checkout@v6
+
+      - name: Check out the v12.0.4 source
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.release == '12.0.4' }}
         uses: actions/checkout@v6
         with:
-          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.release == '12.0.4' && 'ba024c4' || github.ref }}
+          fetch-depth: 0
+          ref: ba024c4f23aaad0076b50fce6057cc3815263115
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
