@@ -1,5 +1,5 @@
 # Compile binaries for arm support:
-FROM gradle:jdk21 AS builder
+FROM gradle:jdk25 AS builder
 
 RUN apt-get update && apt-get install -y curl git bison flex build-essential unzip
 
@@ -23,9 +23,9 @@ WORKDIR /ghidra/support/gradle/
 RUN gradle buildNatives
 
 ##########################################################################################
-FROM alpine:3.21
+FROM alpine:3.23
 
-RUN apk add --no-cache openjdk21-jre bash
+RUN apk add --no-cache openjdk25-jre bash
 RUN apk add --no-cache -t .build-deps ca-certificates
 
 COPY --from=builder /ghidra /ghidra
