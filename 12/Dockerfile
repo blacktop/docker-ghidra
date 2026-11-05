@@ -1,5 +1,5 @@
 # Compile binaries for arm support:
-FROM gradle:jdk21 AS builder
+FROM gradle:jdk25 AS builder
 
 RUN apt-get update && apt-get install -y curl git bison flex build-essential unzip
 
@@ -23,7 +23,7 @@ WORKDIR /ghidra/support/gradle
 RUN gradle buildNatives
 
 ##########################################################################################
-FROM eclipse-temurin:21
+FROM eclipse-temurin:25
 
 RUN apt-get update && apt-get install -y fontconfig libxrender1 libxtst6 libxi6 --no-install-recommends \
     && echo "===> Clean up unnecessary files..." \
