@@ -4,8 +4,13 @@ services:
   server:
     image: blacktop/ghidra
     command: server
+    environment:
+      GHIDRA_IP: ${GHIDRA_IP:?hostname or IP clients use to reach the server}
+      GHIDRA_KEYSTORE: /keys/server.p12
+      GHIDRA_KEYSTORE_PASSWORD: ${GHIDRA_KEYSTORE_PASSWORD:?password of ./keys/server.p12}
     volumes:
       - repo-data:/repos
+      - ./keys:/keys:ro
     ports:
       - "13100"
     networks:

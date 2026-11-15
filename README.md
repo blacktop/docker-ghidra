@@ -103,6 +103,45 @@ $ docker run --init -it --rm \
              blacktop/ghidra server
 ```
 
+#### Server keystore (Ghidra 12.2+)
+
+As of Ghidra 12.2 a server **without a keystore only listens on the loopback interface**, so it is
+unreachable from outside the container and `GHIDRA_IP` is ignored. Mount a PKCS#12 keystore and
+point the server at it:
+
+| variable                   | description                                                    |
+| -------------------------- | -------------------------------------------------------------- |
+| `GHIDRA_KEYSTORE`          | path of the server key/certificate keystore inside the container |
+| `GHIDRA_KEYSTORE_PASSWORD` | password for that keystore                                     |
+| `GHIDRA_IP`                | hostname/IP clients use to reach the server; must be in the certificate |
+
+```bash
+$ docker run --init -it --rm \
+             --name ghidra-server \
+             -p 13100:13100 \
+             -p 13101:13101 \
+             -p 13102:13102 \
+             -e GHIDRA_USERS="root blacktop" \
+             -e GHIDRA_IP=ghidra.example.com \
+             -e GHIDRA_KEYSTORE=/keys/server.p12 \
+             -e GHIDRA_KEYSTORE_PASSWORD=changeme \
+             -v /path/to/keys:/keys:ro \
+             -v /path/to/repos:/repos \
+             blacktop/ghidra server
+```
+
+For a closed network you can generate a self-signed keystore with the bundled `certTool`
+(it prompts for the certificate details); clients then have to trust the resulting certificate,
+see `server/svrREADME.md` in the Ghidra install:
+
+```bash
+$ docker run --init -it --rm -v /path/to/keys:/keys --entrypoint /ghidra/server/certTool \
+             blacktop/ghidra pkcs12 -self-signed -out /keys/server
+```
+
+`certTool` writes `server.p12` readable by root only. If you run the server container as another
+user (`--user`), `chown` the keystore to that user and keep its mode at `0400`.
+
 ## TODO
 
 - [ ] Figure out how to add `--network none` :wink:
